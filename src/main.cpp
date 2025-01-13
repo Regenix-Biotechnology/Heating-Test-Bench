@@ -30,5 +30,5 @@ void loop() {
   Serial.print("Temperature eau: ");
   Serial.print(temperature_int);
   Serial.print("exterieur: ");
-  Serial.print(temp_ext);
+  Serial.println(temp_ext);
 }
