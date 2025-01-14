@@ -1,7 +1,14 @@
 #include <Arduino.h>
+// #include <dht_nonblocking.h>
 #include <Adafruit_Sensor.h>
 #include <DHT.h>
-#include <DHT_U.h>
+// #include <DHT_U.h>
+// #include <DHT11.h>
+
+/*
+NOTE:
+The DHT11 is really unprecise
+*/
 
 #define TMP_SENSOR_EXT A0
 
@@ -12,23 +19,23 @@ DHT dht(DHTPIN, DHTTYPE);
 
 void setup() {
   // put your setup code here, to run once:
-  Serial.begin(115200);
+  Serial.begin(9600);
   dht.begin();
   pinMode(TMP_SENSOR_EXT, INPUT);
-
+  delay(1000);
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  delay(100);
-  uint8_t val_ext = analogRead(TMP_SENSOR_EXT);
-  float_t temp_ext = (val_ext-0.5)*100;
+  delay(1000);
+  uint16_t val_ext = analogRead(TMP_SENSOR_EXT);
+  float temp_ext = (((val_ext)*(5.0/1024.0)) - 0.5)*100;
 
-  float_t humidity = dht.readHumidity();
-  float_t temperature_int = dht.readTemperature();
+  float humidity = dht.readHumidity();
+  float temperature_int = dht.readTemperature();
 
   Serial.print("Temperature eau: ");
-  Serial.print(temperature_int);
-  Serial.print("exterieur: ");
+  Serial.println(temperature_int);
+  Serial.print(" exterieur: ");
   Serial.println(temp_ext);
 }
