@@ -1,7 +1,9 @@
 #include <Arduino.h>
 
+// doit spliiter le 5v du arduino pour sensor temp et relay board
+
 #define TMP_SENSOR_PIN (A0)
-#define RELAY_HEAT_PIN (7)
+#define RELAY_HEAT_PIN (2)
 #define RELAY_VENT_PIN (4)
 
 #define TEMP_DATA_BUFF_SIZE (10)
@@ -42,21 +44,26 @@ void loop() {
   Serial.print("Temperature: ");
   Serial.println(temp);
 
-  delay(10);
+  controller_heat_if(temp);
+
+  delay(1000);
 }
 
 void controller_heat_if(float temp){
   if(temp <= STOP_HEAT_TEMP){
     digitalWrite(RELAY_HEAT_PIN, HIGH);
+    // Serial.println("sup");
   }
   else {
     digitalWrite(RELAY_HEAT_PIN, LOW);
+    Serial.println("bad heat");
   }
   if(temp >= START_VENT_TEMP){
-    digitalWrite(RELAY_HEAT_PIN, HIGH);
+    digitalWrite(RELAY_VENT_PIN, HIGH);
+    Serial.println("bad vent");
   }
   else {
-    digitalWrite(RELAY_HEAT_PIN, LOW);
+    digitalWrite(RELAY_VENT_PIN, LOW);
   }
 
 }
@@ -84,7 +91,7 @@ uint16_t filter_raw_temp(uint16_t raw_temp){
     sum += temp_data_buff[i];
   }
 
-  Serial.println(sum);
+  // Serial.println(sum);
 
   temp_buff_id++;
   if(temp_buff_id>=TEMP_DATA_BUFF_SIZE){
