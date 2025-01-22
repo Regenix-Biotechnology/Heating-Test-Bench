@@ -108,13 +108,16 @@ void controller_heat_pid(float temp){
     digitalWrite(RELAY_VENT_PIN, LOW);
   }
   else {
-    pid_res = pid_res*-1; //set positive value
+    pid_res = pid_res*-1.0; //set positive value
     pid_res = pid_res > 1.0 ? 1.0 : pid_res;// set a 1 si depasse 1
     //basic pwm between 0 and 255
     uint8_t scaled_value = (uint8_t) pid_res*255;
     analogWrite(RELAY_VENT_PIN, scaled_value);
     digitalWrite(RELAY_HEAT_PIN, LOW);
   }
+
+  last_error_pid = err;
+  last_pid_time = current_time;
 
 }
 
